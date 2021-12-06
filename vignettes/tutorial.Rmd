@@ -1,0 +1,99 @@
+---
+title: "tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### Theoretical description
+This package is used for backward or forward selection for linear regression.
+    Forward selection: start with null model; add covariates one at a time
+    Backward selection: start with full model;delete coovariates one at a time <br>
+    From this package we will get the detailed process of adding or deleting covariates and the coefficients of final model.
+
+###Usage
+This function' input includes 4 parameters : `startm`, `endm` , `direction` and `trace` .
+ `startm`-regression for starting model
+ `endm`-regression for full model with all the variables(when using  backward selection, startm=endm)
+`direction`-direction of selection("backward" or "forward")
+`trace`-whether to output detailed process(1=Yes,0=No)
+
+
+When trace==1, this function will print the detailed process of adding or deleting covariates and the coefficients of final model. Whether it is backward selection or forward selection, we can clearly see each step of deleting or adding covariates based on the the model's AIC.
+
+The process contains a functional form of the regression in the selection process, the start AIC, and a table containing:
+`Df`-Degree of freedom of each variables in model for current step
+`Sum Sq`-Regression sum of squares when adding current variable
+`Rss`-Error sum of squares when adding current variable
+`AIC`-The value of AIC when adding current variable
+
+Finally, this function output a linear model chosen after the final selection.
+
+
+
+###Import package
+```{r setup}
+library(modelselection)
+```
+
+###set a dataset 
+```{r}
+set.seed(7.1245)
+data=matrix(rnorm(700),100,7)
+colnames(data)=c("y","x1","x2","x3","x4","x5","x6")
+data=data.frame(data)
+
+```
+
+###run linear regression example
+```{r}
+#just two examples, you can choose your model according to specific situation
+lm1=lm(y~x1,data=data)
+lm2=lm(y~.,data=data)
+```
+
+###forward selection
+```{r}
+selection(lm1,lm2,direction="forward",trace=1)
+```
+
+###backward selection
+```{r}
+selection(lm2,lm2,direction="backward",trace=1)
+```
+
+###set a big dataset
+```{r}
+data1=matrix(rnorm(10000*100),10000,100)
+colnames(data1)=1:100
+colnames(data1)[1]="y"
+for (i in 1:99){
+  colnames(data1)[i+1]=paste("x",as.character(i),sep="")
+}
+data1=data.frame(data1)
+```
+
+###run linear regression example
+```{r}
+lm3=lm(y~x1+x2+x3+x4+x5+x6+x7,data=data1)
+lm4=lm(y~.,data=data1)
+```
+
+
+###Compare our package with function(step)
+
+```{r}
+library(rbenchmark)
+benchmark(selection(lm3,lm4,direction="forward",trace=0), step(lm3,direction="forward",scope=formula(lm4),trace=0))
+system.time(selection(lm3,lm4,direction="forward",trace=0))
+system.time(step(lm3,direction="forward",scope=formula(lm4),trace=0))
+```

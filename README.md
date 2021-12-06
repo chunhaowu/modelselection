@@ -13,17 +13,15 @@ of that object is maximum from other selected initial centroids.
  * You can learn more about them in *Tutorial.html* in vignette folder.
 ----
 
-## Backend
-* The improvement idea is from [here](https://www.ijcsmc.com/docs/papers/July2013/V2I7201338.pdf) but including some changes.
-----
 
 ## installation
-* install.packages('Kmeansimp')
+* install.packages('modelselection')
 ----
 ## Usage
 ```{r}
 library(Kmeansimp) 
 Kmeansimp(df, 2, iter = 20) 
+
 $each_cluster_size
 [1] 7 5 7 6
 $Cluster_means

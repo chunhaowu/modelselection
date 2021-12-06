@@ -1,4 +1,4 @@
-\name{hello}
+\name{modelslection}
 \alias{hello}
 \title{Hello, World!}
 \usage{

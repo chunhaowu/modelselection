@@ -1,3 +1,32 @@
+#'Model selection
+#'
+#'@description
+#'This package is used for backward or forward selection for linear regression
+#'
+#'@param startm regression for starting model
+#'@param endm regression for ending model
+#'@param direction direction of selection("backward" or "forward")
+#'@param trace whether to output detailed process(1=Yes,0=No)
+#'
+#'
+#'@return the detailed process of adding or deleting covariates and final model
+#'
+#'@examples
+#'data=matrix(rnorm(700),100,7)
+#'colnames(data)=c("y","x1","x2","x3","x4","x5","x6")
+#'data=data.frame(data)
+#'lm1=lm(y~x1,data=data)
+#'lm2=lm(y~.,data=data)
+#'lm3=lm(y~x1+x3+x4+x5+x6,data=data)
+#'selection(lm1,lm2,direction="forward",trace=1)
+#'selection(lm2,lm2,direction="backward",trace=1)
+#'selection(lm1,lm1,direction="backward",trace=1)
+#'
+#'@export
+#'
+
+
+
 #This function is used for backward or forward selection for linear regression
 selection=function(startm, endm,direction="forward",trace=1){
   library(stats)
@@ -15,8 +44,8 @@ selection=function(startm, endm,direction="forward",trace=1){
     tempname=c()
     while (TRUE){
       LMsum = matrix(0,nrow = length(subtractname)+1, ncol = 4)
-      #Degree of freedom of each variables in model for this step
       for (i in 1:length(subtractname)){
+        #Degree of freedom of each variables in model for this step
         if (class(mydata2[,subtractname[i]]) == "factor"){
           LMsum[i,1]=length(levels(mydata2[,subtractname[i]]))-1
         }
@@ -71,6 +100,7 @@ selection=function(startm, endm,direction="forward",trace=1){
       if (length(subtractname)==0) break
       LMsum = matrix(0,nrow = length(subtractname)+1, ncol = 4)
 
+      #model without deletion
       data_temp=mydata2[,c(endname,subtractname)]#
       fit_ori=lm(y~.,data=data_temp)#
       ano_ori=anova(fit_ori)#
@@ -79,14 +109,15 @@ selection=function(startm, endm,direction="forward",trace=1){
       colnames(LMsum)=c("Df","Sum of Sq","Rss","AIC")#
       rownames(LMsum)=c(subtractname,"None")#
 
-      #Degree of freedom of each variables in model for this step
       for (i in 1:length(subtractname)){
+        #Degree of freedom of each variables in model for this step
         if (class(mydata2[,subtractname[i]]) == "factor"){
           LMsum[i,1]=length(levels(mydata2[,subtractname[i]]))-1#
         }
         else{
           LMsum[i,1]=1
         }
+        #fit model without ith variable
         if (length(subtractname)>1){
           fit=lm(y~.,data=mydata2[,c(endname,subtractname[-i])])
         }else{
@@ -95,10 +126,10 @@ selection=function(startm, endm,direction="forward",trace=1){
           fit=lm(y~.,data=data_temp)
         }
         ano=anova(fit)
-        #Error sum of squares when delete this variable
+        #Error sum of squares when deleting this variable
         LMsum[i,3]=ano["Residuals","Sum Sq"]#
         LMsum[i,2]=LMsum[i,3]-LMsum[length(subtractname)+1,3]
-        #AIC when delete this variable
+        #AIC when deleting this variable
         LMsum[i,4]=extractAIC(fit)[2]
       }
 
