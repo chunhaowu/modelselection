@@ -93,7 +93,7 @@ lm4=lm(y~.,data=data1)
 
 ```{r}
 library(rbenchmark)
-benchmark(selection(lm3,lm4,direction="forward",trace=0), step(lm3,direction="forward",scope=formula(lm4),trace=0))
+#benchmark(selection(lm3,lm4,direction="forward",trace=0), step(lm3,direction="forward",scope=formula(lm4),trace=0))
 system.time(selection(lm3,lm4,direction="forward",trace=0))
 system.time(step(lm3,direction="forward",scope=formula(lm4),trace=0))
 ```

@@ -16,7 +16,7 @@ selection(startm, endm, direction = "forward", trace = 1)
 \item{trace}{whether to output detailed process(1=Yes,0=No)}
 }
 \value{
-the detailed process of adding or deleting covariates and final model
+the detailed process of adding or deleting covariates and the coefficients of final model
 }
 \description{
 This package is used for backward or forward selection for linear regression
