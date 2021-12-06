@@ -2,14 +2,10 @@
 
 ----
 ## Overview
-* This package is an improved version of standard kmeans clustering which is Lloyd algorithm. The main improved part is initial centroids sampling. 
-* Standard sampling method is to randomly select k points( k is number of clusters) as initial centroids. Yet this way usually converges too slow. The improved 
-version has 3 steps:
-   * Step 1: From all objects randomly select one. 
-   * Step 2: select next initial centroids from n-objects in such a way that the Euclidean distance
-of that object is maximum from other selected initial centroids.
-   * Step 3: repeat step 2 until we get k initial centroids. <br>
- * From these steps we will get initial centroids and with these initial centroids to perform kMeans algorithm. <br>
+* This package is used for backward or forward selection for linear regression.
+   * Forward selection: start with null model; add covariates one at a time
+   * Backward selection: start with full model;delete coovariates one at a time <br>
+ * From this package we will get the detailed process of adding or deleting covariates and final model. <br>
  * You can learn more about them in *Tutorial.html* in vignette folder.
 ----
 
@@ -19,7 +15,8 @@ of that object is maximum from other selected initial centroids.
 ----
 ## Usage
 ```{r}
-library(Kmeansimp) 
+library(modelselection) 
+selection()
 Kmeansimp(df, 2, iter = 20) 
 
 $each_cluster_size

@@ -9,7 +9,7 @@ selection(startm, endm, direction = "forward", trace = 1)
 \arguments{
 \item{startm}{regression for starting model}
 
-\item{endm}{regression for ending model}
+\item{endm}{regression for full model with all the variables(when using backward selection, startm=endm)}
 
 \item{direction}{direction of selection("backward" or "forward")}
 
@@ -27,9 +27,7 @@ colnames(data)=c("y","x1","x2","x3","x4","x5","x6")
 data=data.frame(data)
 lm1=lm(y~x1,data=data)
 lm2=lm(y~.,data=data)
-lm3=lm(y~x1+x3+x4+x5+x6,data=data)
 selection(lm1,lm2,direction="forward",trace=1)
 selection(lm2,lm2,direction="backward",trace=1)
-selection(lm1,lm1,direction="backward",trace=1)
 
 }

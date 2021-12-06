@@ -4,12 +4,12 @@
 #'This package is used for backward or forward selection for linear regression
 #'
 #'@param startm regression for starting model
-#'@param endm regression for ending model
+#'@param endm regression for full model with all the variables(when using backward selection, startm=endm)
 #'@param direction direction of selection("backward" or "forward")
 #'@param trace whether to output detailed process(1=Yes,0=No)
 #'
 #'
-#'@return the detailed process of adding or deleting covariates and final model
+#'@return the detailed process of adding or deleting covariates and the coefficients of final model
 #'
 #'@examples
 #'data=matrix(rnorm(700),100,7)
@@ -17,10 +17,8 @@
 #'data=data.frame(data)
 #'lm1=lm(y~x1,data=data)
 #'lm2=lm(y~.,data=data)
-#'lm3=lm(y~x1+x3+x4+x5+x6,data=data)
 #'selection(lm1,lm2,direction="forward",trace=1)
 #'selection(lm2,lm2,direction="backward",trace=1)
-#'selection(lm1,lm1,direction="backward",trace=1)
 #'
 #'@export
 #'
@@ -55,11 +53,11 @@ selection=function(startm, endm,direction="forward",trace=1){
         #Linear regression when add this variable
         fit=lm(y~.,data=mydata2[,c(startname,tempname,subtractname[i])])
         ano=anova(fit)
-        #Regression sum of squares when add this variable
+        #Regression sum of squares when adding this variable
         LMsum[i,2]=ano[subtractname[i],"Sum Sq"]
-        #Error sum of squares when add this variable
+        #Error sum of squares when adding this variable
         LMsum[i,3]=ano["Residuals","Sum Sq"]
-        #AIC when add this variable
+        #AIC when adding this variable
         LMsum[i,4]=extractAIC(fit)[2]
       }
 
@@ -150,5 +148,5 @@ selection=function(startm, endm,direction="forward",trace=1){
       }
     }
   }
-
+  return(fit_ori)
 }
