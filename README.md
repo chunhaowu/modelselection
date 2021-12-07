@@ -1,5 +1,7 @@
 # modelselection
-
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/chunhaowu/modelslection/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/chunhaowu/modelslection/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 ----
 ## Overview
 * This package is used for backward or forward selection for linear regression.
