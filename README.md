@@ -15,52 +15,93 @@
 ----
 ## Usage
 ```{r}
-library(modelselection) 
-selection()
-Kmeansimp(df, 2, iter = 20) 
+#Import package
+library(modelselection)
 
-$each_cluster_size
-[1] 7 5 7 6
-$Cluster_means
-     [,1] [,2] [,3] [,4]
-[1,] 11.0 36.0 61.0 86.0
-[2,] 23.0 48.0 73.0 98.0
-[3,]  4.0 29.0 54.0 79.0
-[4,] 17.5 42.5 67.5 92.5
-$`Clustering_Vevtor:`
- [1] 3 3 3 3 3 3 3 1 1 1 1 1 1 1 4 4 4 4 4 4 2 2 2 2 2
-$`Within_cluster_sum_of_squares(withinSS)`
-[1] 112  40 112  70
-$`proportion of betweenSS with totalSS`
-[1] 0.94
-Kmeansimp(matrix, 4, 10) 
-$each_cluster_size
-[1] 7 6 6 6
-$Cluster_means
-     [,1] [,2] [,3] [,4]
-[1,] 10.0 35.0 60.0 85.0
-[2,] 22.5 47.5 72.5 97.5
-[3,]  3.5 28.5 53.5 78.5
-[4,] 16.5 41.5 66.5 91.5
-$`Clustering_Vevtor:`
- [1] 3 3 3 3 3 3 1 1 1 1 1 1 1 4 4 4 4 4 4 2 2 2 2 2 2
-$`Within_cluster_sum_of_squares(withinSS)`
-[1] 112  70  70  70
-$`proportion of betweenSS with totalSS`
-[1] 0.94
-Kmeansimp(matrix, 5)
-$each_cluster_size
-[1] 5 4 3 4 4
-$Cluster_means
-     [,1] [,2] [,3] [,4] [,5]
-[1,] 10.0 30.0 50.0 70.0 90.0
-[2,] 18.5 38.5 58.5 78.5 98.5
-[3,]  2.0 22.0 42.0 62.0 82.0
-[4,] 14.5 34.5 54.5 74.5 94.5
-[5,]  5.5 25.5 45.5 65.5 85.5
-$`Clustering_Vevtor:`
- [1] 3 3 3 5 5 5 5 1 1 1 1 1 4 4 4 4 2 2 2 2
-$`Within_cluster_sum_of_squares(withinSS)`
-[1] 50 25 10 25 25
-$`proportion of betweenSS with totalSS`
-[1] 0.96
+#set a dataset 
+set.seed(7.1245)
+data=matrix(rnorm(700),100,7)
+colnames(data)=c("y","x1","x2","x3","x4","x5","x6")
+data=data.frame(data)
+
+#run linear regression example
+lm1=lm(y~x1,data=data)
+lm2=lm(y~.,data=data)
+
+#forward selection
+selection(lm1,lm2,direction="forward",trace=1)
+
+Start: AIC= -5.428045 
+     Df Sum of Sq      Rss        AIC
+x4    1 6.8800258 84.12273 -11.289344
+x3    1 3.0333615 87.96939  -6.818128
+None  0 0.0000000 91.00275  -5.428045
+x5    1 0.9449805 90.05777  -4.471883
+x6    1 0.3079665 90.69478  -3.767033
+x2    1 0.2821497 90.72060  -3.738572
+Start: AIC= -11.28934 
+     Df Sum of Sq      Rss        AIC
+x3    1 1.9961466 82.12658 -11.690849
+None  0 0.0000000 84.12273 -11.289344
+x5    1 1.2802099 82.84252 -10.822879
+x6    1 0.5285894 83.59414  -9.919681
+x2    1 0.3158991 83.80683  -9.665572
+Start: AIC= -11.69085 
+     Df Sum of Sq      Rss       AIC
+None  0 0.0000000 82.12658 -11.69085
+x5    1 0.9521198 81.17446 -10.85695
+x6    1 0.5885968 81.53798 -10.41012
+x2    1 0.4127031 81.71388 -10.19464
+
+Call:
+lm(formula = y ~ ., data = data_temp)
+
+Coefficients:
+(Intercept)           x1           x4           x3  
+    0.14866      0.06318     -0.26590      0.14054  
+
+#backward selection
+selection(lm2,lm2,direction="backward",trace=1)
+
+Start: AIC= -8.203491 
+     Df Sum of Sq      Rss        AIC
+x2    1 0.1252142 80.21395 -10.047269
+x1    1 0.4749354 80.56368  -9.612231
+x6    1 0.7241413 80.81288  -9.303380
+x5    1 1.2335654 81.32231  -8.674984
+None  0 0.0000000 80.08874  -8.203491
+x3    1 1.7321358 81.82088  -8.063776
+x4    1 6.4711156 86.55986  -2.433403
+Start: AIC= -10.04727 
+     Df Sum of Sq      Rss        AIC
+x1    1 0.4240023 80.63796 -11.520071
+x6    1 0.9605039 81.17446 -10.856954
+x5    1 1.3240269 81.53798 -10.410124
+None  0 0.0000000 80.21395 -10.047269
+x3    1 1.6816865 81.89564  -9.972442
+x4    1 6.5097184 86.72367  -4.244329
+Start: AIC= -11.52007 
+     Df Sum of Sq      Rss        AIC
+x6    1 0.9688433 81.60680 -12.325759
+x5    1 1.1852106 81.82317 -12.060976
+None  0 0.0000000 80.63796 -11.520071
+x3    1 2.1934315 82.83139 -10.836311
+x4    1 6.1193114 86.75727  -6.205598
+Start: AIC= -12.32576 
+     Df Sum of Sq      Rss        AIC
+x5    1 0.8284962 82.43530 -13.315648
+None  0 0.0000000 81.60680 -12.325759
+x3    1 2.1817113 83.78851 -11.687428
+x4    1 5.7595943 87.36639  -7.505948
+Start: AIC= -13.31565 
+     Df Sum of Sq      Rss        AIC
+None  0  0.000000 82.43530 -13.315648
+x3    1  2.461797 84.89709 -12.373033
+x4    1  5.586201 88.02150  -8.758911
+
+Call:
+lm(formula = y ~ ., data = data_temp)
+
+Coefficients:
+(Intercept)           x3           x4  
+     0.1567       0.1524      -0.2464  

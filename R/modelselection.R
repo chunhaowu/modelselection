@@ -148,5 +148,9 @@ selection=function(startm, endm,direction="forward",trace=1){
       }
     }
   }
-  return(fit_ori)
+  if (length(subtractname)>0){
+    return(fit_ori)
+  }else{
+    return(fit)
+  }
 }

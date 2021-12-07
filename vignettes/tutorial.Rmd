@@ -90,7 +90,7 @@ lm4=lm(y~.,data=data1)
 
 
 ###Compare our package with function(step)
-
+This package is approximately half that of function(step).For example,here, the time for function(step) is approximately 8 seconds, the time for our package is approximately 12 seconds. 
 ```{r}
 library(rbenchmark)
 #benchmark(selection(lm3,lm4,direction="forward",trace=0), step(lm3,direction="forward",scope=formula(lm4),trace=0))
